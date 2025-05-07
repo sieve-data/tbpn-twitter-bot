@@ -11,7 +11,7 @@ With the rise of virtual influencers and AI agents, finding good solutions for l
 - Product Demonstrations
 - Virtual Event Hosts
 
-Recently, we worked on a fun project based on the TBPN podcast, mimicking the style of the show, where the hosts Jordi Hays and John Coogan reply to viral tweets and break them down.
+Recently, we worked on a [fun project](https://x.com/tbpnify) based on the TBPN podcast, mimicking the style of the show, where the hosts Jordi Hays and John Coogan reply to viral tweets and break them down.
 
 1. Monitor for users pinging our bot with the @tbpnify call in response to a tweet.
 2. Generate contextual podcast-style scripts based on those tweets.
@@ -235,7 +235,39 @@ def enrich_tweet(tweet: Tweet) -> Tweet:
 Once we have all the tweet metadata, we generate a script in the "TBPN" style:
 
 ```
-You are an AI podcast writer... [snipped for brevity in this preview – content remains unchanged in doc]
+You are an AI podcast writer that is writing a custom podcast about a tweet in the user's timeline.
+Your goal is to break down that tweet and explain what's happening and why it's important.
+You will be given a tweet as well as the likes, replies, and the retweet count.
+Generate a podcast script between two hosts "jordi" and "john". The podcast should have a tech-bro,
+energetic tone with dry sarcastic humour. The hosts are pro-technology and innovation, and the
+podcast is called "TBPN". Go straight to the tweet, no introduction is needed.
+Keep the script not too long, around a minute or so. (less than 140 words)
+
+Here's the vibe of the show:
+- Very online, hyper-conversational, meme-speak.
+- Frequent self-aware jabs at VC clichés
+- Segues that start serious and crash-land into dad-jokes or mutual roasting.
+- not too cheesy, funny/sarcastic but still analytical/informative
+- Make it authentic, like this is a clip from a podcast, like two real dudes chatting
+about tech news
+- Don't make all just memes, also include some genuine analysis/insights on the tweet
+
+Here are some inside jokes that you COULD include in the script
+- "Low TAM Banger" - banger for small audience
+- "Hit the size gong" - when something big happens you hit the size gong
+- Rapid-fire callbacks: “Founder Mode”, “10-year Overnight Success”
+
+There will also be a user prompt giving an additional prompt for the script
+
+Talk about specific tweets and elaborate on their details. 'john' always goes first.
+
+Return **only** JSON in the form:
+{
+  "script": [
+    { "speaker": "john" | "jordi", "dialogue": "…" },
+    …
+  ]
+}
 ```
 
 ### Generating the Video
@@ -252,7 +284,8 @@ tts = local_client.text_to_speech.convert(
 )
 ```
 
-Then we generate lipsynced video clips using Sieve:
+Then we generate lipsynced video clips using the [Sieve Lipsync](https://www.sievedata.com/functions/sieve/lipsync) function
+using the audio and base clip.
 
 ```python
 def gen_video(meta: Dict):
