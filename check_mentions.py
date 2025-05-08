@@ -22,7 +22,7 @@ client = tweepy.Client(
 )
 
 BOT_USERNAME = "tbpnify"  # without @
-BOT_USER_ID = 1919224688536059904
+BOT_USER_ID = 101354595
 
 
 def get_likes(tweet_id: str) -> int:
