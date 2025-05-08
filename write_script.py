@@ -171,7 +171,9 @@ def generate_tweet(script: List) -> str:
                 "role": "system",
                 "content": """You are a tweet generator based on a script.
                 Make the tweet is interesting and engagement bate worthy. The tweet
-                should hook people in to the video.
+                should hook people in to the video. But keep it realistic and not 
+                overexaggerated, don't use any emojis or hastags. Simple and 
+                straight to the point.
                 """,
             },
             {
