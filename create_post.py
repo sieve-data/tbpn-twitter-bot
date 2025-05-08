@@ -90,7 +90,8 @@ def create_tbpn_post(
     result_video_url = output["stitched_video"]
     if tweet_video:
         download_url(result_video_url, video_path)
-        quote_url = post_quote(tweet_url, video_path, tweet_text)
+        tweet_id = tweet_url.split("/")[-1]
+        quote_url = post_quote(tweet_id, video_path, tweet_text)
         post_reply(
             quote_url,
             reply_id,
