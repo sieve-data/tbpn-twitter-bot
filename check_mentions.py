@@ -108,10 +108,6 @@ def check_mentions():
                 #     print(f"Tweet {tweet.id} has less than 100 likes, skipping...")
                 #     continue
 
-                if is_valid_summon(tweet):
-                    print("tweet is not original reply")
-                    continue
-
                 # Check if tweet has already been processed
                 with open(
                     "/home/ubuntu/tbpn-twitter-bot/checked_posts.txt",
