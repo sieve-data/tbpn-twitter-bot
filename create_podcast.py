@@ -25,8 +25,8 @@ class Dialogue(TypedDict):
 
 eleven_labs_api_key = os.getenv("ELEVEN_LABS_API_KEY")
 
-jordi_voice_id = "Tw6MHQ70AkrkqFDf75BN"
-john_voice_id = "qMH3IpwT6hc2977abay7"
+jordi_voice_id = "nOXvIUY9HPp4dnWjSFBK"
+john_voice_id = "yJbR4Y7a6G18Ysd7kZh3"
 
 aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
 aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
