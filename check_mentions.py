@@ -43,13 +43,10 @@ def is_valid_summon(tweet) -> bool:
 
     # 2️⃣  Is it a reply at all?
     if tweet.in_reply_to_user_id is None:  # not a reply ⇒ ignore
-        print("not a reply")
         return False
 
-    print(str(tweet.in_reply_to_user_id))
     # 3️⃣  Is it replying **to the bot**?  If so, skip.
     if str(tweet.in_reply_to_user_id) == BOT_USER_ID:
-        print("not reply to tbpnify")
         return False  # user’s just chatting with us
 
     return True
@@ -69,7 +66,7 @@ def check_mentions():
             "in_reply_to_user_id",
             "public_metrics",
         ],
-        "expansions": ["referenced_tweets.id.author_id"],
+        "expansions": ["referenced_tweets.id.author_id", "in_reply_to_user_id"],
         "user_fields": ["username"],
         "max_results": 10,
         "user_auth": True,
@@ -81,6 +78,8 @@ def check_mentions():
 
     # Build a map of tweet_id -> author username from the expansions
     tweet_author_map = {}
+    user_map = {u.id: u.username for u in response.includes.get("users", [])}
+
     if includes and "tweets" in includes and "users" in includes:
         tweet_map = {t.id: t for t in includes["tweets"]}
         user_map = {u.id: u.username for u in includes["users"]}
@@ -90,9 +89,15 @@ def check_mentions():
 
     for tweet in reversed(tweets):  # Oldest to newest
         print(f"New mention: {tweet.text}")
+        parent_uid = tweet.in_reply_to_user_id
+        parent_username = user_map.get(parent_uid)
+        print(parent_username)
 
         # check if tweet is a reply
         if not tweet.referenced_tweets:
+            continue
+
+        if parent_username == BOT_USERNAME:
             continue
 
         for ref in tweet.referenced_tweets:
