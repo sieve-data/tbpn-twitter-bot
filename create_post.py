@@ -72,6 +72,9 @@ def post_reply(quote_url: str, tweet_reply_id: str):
 def create_tbpn_post(
     tweet_url: str, user_prompt: str, reply_id: str, tweet_video: bool = True
 ):
+    load_dotenv()
+    print(api_key)
+
     tweet, replies = get_tweet_and_replies(tweet_url)
     if tweet.image:
         image_content = describe_image(tweet.image)

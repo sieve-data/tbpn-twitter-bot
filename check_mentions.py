@@ -22,6 +22,7 @@ client = tweepy.Client(
 )
 
 BOT_USERNAME = "tbpnify"  # without @
+BOT_USER_ID = 1919224688536059904
 
 
 def get_likes(tweet_id: str) -> int:
@@ -29,6 +30,26 @@ def get_likes(tweet_id: str) -> int:
         tweet_id, tweet_fields=["public_metrics"], user_auth=True
     )
     return response.data.public_metrics["like_count"]
+
+
+def is_valid_summon(tweet) -> bool:
+    txt = tweet.text.lower()
+
+    # 1️⃣  Does the text actually contain @tbpnify?
+    if (
+        BOT_USERNAME not in txt
+    ):  # shouldn’t happen given your query, but belt-and-suspenders
+        return False
+
+    # 2️⃣  Is it a reply at all?
+    if tweet.in_reply_to_user_id is None:  # not a reply ⇒ ignore
+        return False
+
+    # 3️⃣  Is it replying **to the bot**?  If so, skip.
+    if str(tweet.in_reply_to_user_id) == BOT_USER_ID:
+        return False  # user’s just chatting with us
+
+    return True
 
 
 def check_mentions():
@@ -75,12 +96,11 @@ def check_mentions():
             if ref["type"] == "replied_to":
                 replied_to_id = ref["id"]
                 # if tweet doesn't have atleast 100 likes, skip
-                # if get_likes(replied_to_id) < 100:
-                #     print(f"Tweet {tweet.id} has less than 100 likes, skipping...")
-                #     continue
+                if get_likes(replied_to_id) < 100:
+                    print(f"Tweet {tweet.id} has less than 100 likes, skipping...")
+                    continue
 
-                # if tweet doesn't
-                if tweet.text.count("@") > 2:
+                if is_valid_summon(tweet):
                     print("tweet is not original reply")
                     continue
 
