@@ -43,10 +43,13 @@ def is_valid_summon(tweet) -> bool:
 
     # 2️⃣  Is it a reply at all?
     if tweet.in_reply_to_user_id is None:  # not a reply ⇒ ignore
+        print("not a reply")
         return False
 
+    print(str(tweet.in_reply_to_user_id))
     # 3️⃣  Is it replying **to the bot**?  If so, skip.
     if str(tweet.in_reply_to_user_id) == BOT_USER_ID:
+        print("not reply to tbpnify")
         return False  # user’s just chatting with us
 
     return True
@@ -96,9 +99,9 @@ def check_mentions():
             if ref["type"] == "replied_to":
                 replied_to_id = ref["id"]
                 # if tweet doesn't have atleast 100 likes, skip
-                if get_likes(replied_to_id) < 100:
-                    print(f"Tweet {tweet.id} has less than 100 likes, skipping...")
-                    continue
+                # if get_likes(replied_to_id) < 100:
+                #     print(f"Tweet {tweet.id} has less than 100 likes, skipping...")
+                #     continue
 
                 if is_valid_summon(tweet):
                     print("tweet is not original reply")
