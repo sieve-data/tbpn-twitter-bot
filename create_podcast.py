@@ -171,7 +171,7 @@ def make_podcast(script: List, title: str):
         overlay_image_path = os.path.join(td, "overlay.png")
         print(f"Downloading overlay to: {overlay_image_path}")
         download_url(
-            "https://inpaint-results.s3.us-east-2.amazonaws.com/tbpncover2.png",
+            "https://inpaint-results.s3.us-east-2.amazonaws.com/tbpncover3.png",
             overlay_image_path,
         )  # Placeholder
 
