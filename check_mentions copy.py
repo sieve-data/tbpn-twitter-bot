@@ -106,7 +106,7 @@ def check_mentions():
 
                 # Check if tweet has already been processed
                 with open(
-                    "/home/ubuntu/tbpn-twitter-bot/checked_posts.txt",
+                    "/Users/adipanda/codingProjects/tbpn-twitter-bot/checked_posts.txt",
                     "r",
                 ) as f:
                     checked_posts = f.read().splitlines()
@@ -123,7 +123,7 @@ def check_mentions():
 
                 # Add to checked posts
                 with open(
-                    "/home/ubuntu/tbpn-twitter-bot/checked_posts.txt",
+                    "/Users/adipanda/codingProjects/tbpn-twitter-bot/checked_posts.txt",
                     "a",
                 ) as f:
                     f.write(f"{replied_to_id}\n")
