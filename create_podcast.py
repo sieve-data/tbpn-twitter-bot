@@ -68,6 +68,7 @@ def upload_s3_bytes(
         s3.upload_fileobj(io.BytesIO(data), bucket_name, object_name, ExtraArgs=headers)
         # print(f"File uploaded successfully to {bucket_name}/{object_name}")
         url = f"https://{bucket_name}.s3.{region_name}.amazonaws.com/{object_name}"
+        print(url)
         return url
     except Exception as e:
         print(f"Error uploading file: {str(e)}")
@@ -96,7 +97,7 @@ def make_podcast(script: List, title: str):
             output_format="mp3_44100_128",
             voice_settings={
                 "stability": 0.1,
-                "similarity_boost": 0.5,
+                "similarity_boost": 0.8,
             },
         )
         audio_bytes = b"".join(tts)
@@ -170,7 +171,7 @@ def make_podcast(script: List, title: str):
         overlay_image_path = os.path.join(td, "overlay.png")
         print(f"Downloading overlay to: {overlay_image_path}")
         download_url(
-            "https://inpaint-results.s3.us-east-2.amazonaws.com/tbpncover+(1).png",
+            "https://inpaint-results.s3.us-east-2.amazonaws.com/tbpncover2.png",
             overlay_image_path,
         )  # Placeholder
 

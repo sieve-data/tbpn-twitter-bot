@@ -1,7 +1,13 @@
 import requests
 from read_post import get_tweet_and_replies
 
-from write_script import describe_image, enrich_tweet, generate_title, write_script
+from write_script import (
+    describe_image,
+    enrich_tweet,
+    generate_title,
+    generate_tweet,
+    write_script,
+)
 import tweepy
 import os
 import sieve
@@ -39,11 +45,12 @@ def download_url(url: str, path: str):
         f.write(response.content)
 
 
-def post_quote(tweet_url: str, video_path: str, tweet_reply_id: str):
+def post_quote(tweet_id: int, video_path: str, tweet_text: str):
     upload_result = api.media_upload(video_path)
     tweet_response = client_v2.create_tweet(
-        text=f"{tweet_url} Here's the breakdown: ",
+        text=tweet_text,
         media_ids=[upload_result.media_id],
+        quote_tweet_id=tweet_id,
     )
     return f"https://x.com/tbpnify/status/{tweet_response.data['id']}"
 
@@ -74,6 +81,7 @@ def create_tbpn_post(
     tweet = enrich_tweet(tweet)
     script = write_script(tweet, replies, user_prompt)
     title = generate_title(script)
+    tweet_text = generate_tweet(script)
     print(script)
     generate_podcast = sieve.function.get("sieve-internal/generate-podcast")
     output = generate_podcast.run(script, title)
@@ -82,7 +90,7 @@ def create_tbpn_post(
     result_video_url = output["stitched_video"]
     if tweet_video:
         download_url(result_video_url, video_path)
-        quote_url = post_quote(tweet_url, video_path, reply_id)
+        quote_url = post_quote(tweet_url, video_path, tweet_text)
         post_reply(
             quote_url,
             reply_id,

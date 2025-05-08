@@ -163,6 +163,27 @@ def generate_title(script: List) -> str:
     return completion.choices[0].message.content
 
 
+def generate_tweet(script: List) -> str:
+    completion = openai_client.chat.completions.create(
+        model="gpt-4.5-preview",
+        messages=[
+            {
+                "role": "system",
+                "content": """You are a tweet generator based on a script.
+                Make the tweet is interesting and engagement bate worthy. The tweet
+                should hook people in to the video.
+                """,
+            },
+            {
+                "role": "user",
+                "content": f"Please generate a tweet based on this script {script}",
+            },
+        ],
+    )
+
+    return completion.choices[0].message.content
+
+
 def write_script(tweet: Tweet, replies: List[Tweet], prompt: str) -> List[dict]:
     replies_text = ""
     for t in replies:
