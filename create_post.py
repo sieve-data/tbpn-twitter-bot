@@ -45,7 +45,9 @@ def download_url(url: str, path: str):
         f.write(response.content)
 
 
-def post_quote(tweet_id: int, video_path: str, tweet_text: str):
+def post_quote(tweet_url: int, video_path: str, tweet_text: str):
+    tweet_id = tweet_url.split("/")[-1]
+    print(tweet_id)
     upload_result = api.media_upload(video_path)
     tweet_response = client_v2.create_tweet(
         text=tweet_text,
@@ -90,8 +92,7 @@ def create_tbpn_post(
     result_video_url = output["stitched_video"]
     if tweet_video:
         download_url(result_video_url, video_path)
-        tweet_id = tweet_url.split("/")[-1]
-        quote_url = post_quote(tweet_id, video_path, tweet_text)
+        quote_url = post_quote(tweet_url, video_path, tweet_text)
         post_reply(
             quote_url,
             reply_id,
