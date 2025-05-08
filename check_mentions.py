@@ -23,6 +23,8 @@ client = tweepy.Client(
 
 BOT_USERNAME = "tbpnify"
 BOT_USER_ID = 101354595
+# check_log_path = "/home/ubuntu/tbpn-twitter-bot/checked_posts.txt"
+check_log_path = "/Users/adipanda/codingProjects/tbpn-twitter-bot/checked_posts.txt"
 
 
 def get_likes(tweet_id: str) -> int:
@@ -57,7 +59,7 @@ def run_scheduled_posts(tweet_data):
         create_tbpn_post.push(reply_url, tweet_text, tweet_id)
 
         # Save to checked posts
-        with open("/home/ubuntu/tbpn-twitter-bot/checked_posts.txt", "a") as f:
+        with open(check_log_path, "a") as f:
             f.write(f"{reply_url.split('/')[-1]}\n")
 
         if idx < total - 1:
@@ -99,10 +101,11 @@ def check_mentions():
             if t.author_id in user_map:
                 tweet_author_map[t.id] = user_map[t.author_id]
 
-    with open("/home/ubuntu/tbpn-twitter-bot/checked_posts.txt", "r") as f:
-        checked_posts = set(f.read().splitlines())
+    with open(check_log_path, "r") as f:
+        checked_posts = set(f.read().split())
 
     scheduled_tweets = []
+    print(checked_posts)
 
     for tweet in reversed(tweets):  # Oldest to newest
         print(f"New mention: {tweet.text}")
@@ -112,7 +115,8 @@ def check_mentions():
         for ref in tweet.referenced_tweets:
             if ref["type"] == "replied_to":
                 replied_to_id = ref["id"]
-                if replied_to_id in checked_posts:
+                print(replied_to_id)
+                if str(replied_to_id) in checked_posts:
                     print(f"Already processed tweet {replied_to_id}, skipping...")
                     continue
 

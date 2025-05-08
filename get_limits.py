@@ -21,12 +21,17 @@ client = tweepy.Client(
 resp = client.create_tweet(text="Testing rate limit! 😊", user_auth=True)
 
 headers = resp.headers
-headers = resp.headers
 
+print("User daily limit : ", headers.get("x-user-limit-24hour-limit"))
+print("User remaining   : ", headers.get("x-user-limit-24hour-remaining"))
 print(
-    "Limit (per window):", headers["x-rate-limit-limit"]
-)  # 🔢 100, 17, 300 … depends on your plan
-print("Remaining:        ", headers["x-rate-limit-remaining"])
-print(
-    "Window resets:    ", dt.datetime.fromtimestamp(int(headers["x-rate-limit-reset"]))
+    "User resets      : ",
+    (
+        dt.datetime.fromtimestamp(int(headers["x-user-limit-24hour-reset"]))
+        if "x-user-limit-24hour-reset" in headers
+        else "—"
+    ),
 )
+
+print("App daily limit  : ", headers.get("x-app-limit-24hour-limit"))
+print("App remaining    : ", headers.get("x-app-limit-24hour-remaining"))
