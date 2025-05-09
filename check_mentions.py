@@ -85,6 +85,7 @@ def check_mentions():
         "expansions": ["referenced_tweets.id.author_id", "in_reply_to_user_id"],
         "user_fields": ["username"],
         "max_results": 10,
+        "sort_order": "recency",  # 👈 force recency ordering
         "user_auth": True,
     }
 
