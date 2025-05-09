@@ -1,4 +1,5 @@
 import requests
+from create_podcast import make_podcast
 from read_post import get_tweet_and_replies
 
 from write_script import (
@@ -37,14 +38,6 @@ client_v2 = tweepy.Client(
 )
 
 
-def download_url(url: str, path: str):
-    headers = {"User-Agent": "Mozilla/5.0"}
-    response = requests.get(url)
-    response.raise_for_status()  # Raise an error if not 200 OK
-    with open(path, "wb") as f:
-        f.write(response.content)
-
-
 def post_quote(tweet_url: int, video_path: str, tweet_text: str):
     tweet_id = tweet_url.split("/")[-1]
     print(tweet_id)
@@ -67,7 +60,15 @@ def post_reply(quote_url: str, tweet_reply_id: str):
 
 @sieve.function(
     name="create-tbpn-post",
-    python_packages=["tweepy", "requests", "python-dotenv", "openai"],
+    python_packages=[
+        "tweepy",
+        "elevenlabs",
+        "mutagen",
+        "requests",
+        "python-dotenv",
+        "openai",
+    ],
+    system_packages=["ffmpeg"],
 )
 def create_tbpn_post(
     tweet_url: str, user_prompt: str, reply_id: str, tweet_video: bool = True
@@ -88,21 +89,16 @@ def create_tbpn_post(
     title = generate_title(script)
     tweet_text = generate_tweet(script)
     print(script)
-    generate_podcast = sieve.function.get("sieve-internal/generate-podcast")
-    output = generate_podcast.run(script, title)
-    print(output)
-    video_path = "video.mp4"
-    result_video_url = output["stitched_video"]
+    podcast_video_path = make_podcast(script, title)
     if tweet_video:
-        download_url(result_video_url, video_path)
-        quote_url = post_quote(tweet_url, video_path, tweet_text)
+        quote_url = post_quote(tweet_url, podcast_video_path, tweet_text)
         post_reply(
             quote_url,
             reply_id,
         )
         return quote_url
     else:
-        return result_video_url
+        return sieve.File(path=podcast_video_path)
 
 
 # create_tbpn_post("https://x.com/realDonaldTrump/status/1919395973802897676")
