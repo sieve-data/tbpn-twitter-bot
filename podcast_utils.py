@@ -7,6 +7,9 @@ import sieve
 from mutagen.mp3 import MP3
 import io
 from video_clips import clips
+from dotenv import load_dotenv
+
+load_dotenv()
 
 eleven_labs_api_key = os.getenv("ELEVEN_LABS_API_KEY")
 jordi_voice_id = "Tw6MHQ70AkrkqFDf75BN"
