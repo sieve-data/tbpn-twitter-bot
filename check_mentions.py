@@ -22,8 +22,8 @@ client = tweepy.Client(
 )
 
 
-# check_log_path = "/home/ubuntu/tbpn-twitter-bot/checked_posts.txt"
-check_log_path = "/Users/adipanda/codingProjects/tbpn-twitter-bot/checked_posts.txt"
+check_log_path = "/home/ubuntu/tbpn-twitter-bot/checked_posts.txt"
+# check_log_path = "/Users/adipanda/codingProjects/tbpn-twitter-bot/checked_posts.txt"
 
 
 def get_likes(tweet_id: str) -> int:
