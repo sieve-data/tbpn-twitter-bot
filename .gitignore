@@ -3,3 +3,4 @@ venv/
 __pycache__/
 *.mp4
 cron.log
+*.mov
