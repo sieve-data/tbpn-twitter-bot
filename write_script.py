@@ -173,7 +173,8 @@ def generate_tweet(script: List) -> str:
                 Make the tweet is interesting and engagement bate worthy. The tweet
                 should hook people in to the video. But keep it realistic and not 
                 overexaggerated, don't use any emojis or hastags. Simple and 
-                straight to the point.
+                straight to the point. It should start with one super poignant line,
+                then the rest should follow. Don't use em dashes.
                 """,
             },
             {

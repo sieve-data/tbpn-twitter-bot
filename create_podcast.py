@@ -86,14 +86,13 @@ def make_podcast(script: List, title: str):
                 [
                     "ffmpeg",
                     "-y",
-                    "-i", temp_stitched_path,        # background video
-                    "-i", overlay_video_path,        # transparent overlay video
+                    "-i", temp_stitched_path,
+                    "-i", overlay_video_path,
                     "-filter_complex",
                     (
-                        "[1:v]format=rgba,scale=1280:720[ovrl];"
+                        "[1:v]format=rgba[ovrl];"
                         "[0:v][ovrl]overlay=0:0:format=auto[tmp];"
-                        "drawtext=text='{text}':fontcolor=black:fontsize=48:x=185:y=H-th-180[tmp2];"
-                        "[tmp2]format=yuv420p[out]"
+                        "[tmp]drawtext=text='{text}':fontcolor=black:fontsize=48:x=185:y=H-th-180,format=yuv420p[out]"
                     ).replace("{text}", text),
                     "-map", "[out]",
                     "-map", "0:a?",
