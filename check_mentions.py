@@ -103,16 +103,15 @@ def check_mentions():
             if t.author_id in user_map:
                 tweet_author_map[t.id] = user_map[t.author_id]
 
-    with open(check_log_path, "r") as f:
-        checked_posts = set(f.read().split())
 
     scheduled_tweets = []
-    print(checked_posts)
 
     for tweet in reversed(tweets):  # Oldest to newest
         print(f"New mention: {tweet.text}")
         if not is_valid_summon(tweet):
             continue
+        with open(check_log_path, "r") as f:
+            checked_posts = set(f.read().split())
 
         for ref in tweet.referenced_tweets:
             if ref["type"] == "replied_to":
