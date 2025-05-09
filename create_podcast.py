@@ -98,28 +98,32 @@ def make_podcast(script: List, title: str):
 
         text = escape_for_drawtext(title)
 
-        subprocess.run(
-            [
-                "ffmpeg",
-                "-y",
-                "-i",
-                temp_stitched_path,
-                "-i",
-                overlay_image_path,
-                "-filter_complex",
-                f"[0:v][1:v]overlay=0:0:format=auto,drawtext=text='{text}':fontcolor=black:fontsize=48:x=185:y=H-th-180,format=yuv420p[out]",
-                "-map",
-                "[out]",
-                "-map",
-                "0:a?",
-                "-c:a",
-                "aac",
-                "-shortest",
-                final_stitched_path,
-            ],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
+        try:
+            subprocess.run(
+                [
+                    "ffmpeg",
+                    "-y",
+                    "-i",
+                    temp_stitched_path,
+                    "-i",
+                    overlay_image_path,
+                    "-filter_complex",
+                    f"[0:v][1:v]overlay=0:0:format=auto,drawtext=text='{text}':fontcolor=black:fontsize=48:x=185:y=H-th-180,format=yuv420p[out]",
+                    "-map",
+                    "[out]",
+                    "-map",
+                    "0:a?",
+                    "-c:a",
+                    "aac",
+                    "-shortest",
+                    final_stitched_path,
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+        except subprocess.CalledProcessError as e:
+            print(e.stderr)
+            raise
 
         return final_stitched_path

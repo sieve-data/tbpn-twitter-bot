@@ -1,4 +1,3 @@
-import requests
 from create_podcast import make_podcast
 from read_post import get_tweet_and_replies
 

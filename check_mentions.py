@@ -21,8 +21,7 @@ client = tweepy.Client(
     access_token_secret=access_token_secret,
 )
 
-BOT_USERNAME = "tbpnify"
-BOT_USER_ID = 101354595
+
 # check_log_path = "/home/ubuntu/tbpn-twitter-bot/checked_posts.txt"
 check_log_path = "/Users/adipanda/codingProjects/tbpn-twitter-bot/checked_posts.txt"
 
@@ -32,17 +31,6 @@ def get_likes(tweet_id: str) -> int:
         tweet_id, tweet_fields=["public_metrics"], user_auth=True
     )
     return response.data.public_metrics["like_count"]
-
-
-def is_valid_summon(tweet) -> bool:
-    txt = tweet.text.lower()
-    if BOT_USERNAME not in txt:
-        return False
-    if tweet.in_reply_to_user_id is None:
-        return False
-    if str(tweet.in_reply_to_user_id) == str(BOT_USER_ID):
-        return False
-    return True
 
 
 def run_scheduled_posts(tweet_data):
@@ -67,11 +55,24 @@ def run_scheduled_posts(tweet_data):
             time.sleep(interval)
 
 
+BOT_USERNAME = "tbpnify"
+BOT_USER_ID = 101354595
+
+
+def is_valid_summon(tweet) -> bool:
+    txt = tweet.text.lower()
+    if BOT_USERNAME not in txt:
+        return False
+    if tweet.in_reply_to_user_id is None:
+        return False
+    return True
+
+
 def check_mentions():
     utc_dt = datetime.now(timezone.utc)
     print("Local time {}".format(utc_dt.astimezone().isoformat()))
 
-    query = f"@{BOT_USERNAME} -is:retweet"
+    query = f"@{BOT_USERNAME} -is:retweet -to:{BOT_USERNAME}"
     params = {
         "query": query,
         "tweet_fields": [
