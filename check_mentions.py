@@ -39,7 +39,7 @@ def run_scheduled_posts(tweet_data):
         print("No new valid mentions to process.")
         return
 
-    interval = 3600 // total  # seconds between each post
+    interval = 900 // total  # seconds between each post
 
     for idx, (reply_url, tweet_text, tweet_id) in enumerate(tweet_data):
         print(f"Posting #{idx + 1}/{total}: {reply_url}")
