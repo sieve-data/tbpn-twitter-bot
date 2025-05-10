@@ -61,10 +61,19 @@ BOT_USER_ID = 101354595
 
 def is_valid_summon(tweet) -> bool:
     txt = tweet.text.lower()
-    if BOT_USERNAME not in txt:
+
+    # 1️⃣ explicit @tbpnify mention in the *body* of the tweet
+    if f"@{BOT_USERNAME.lower()}" not in txt:
         return False
+
+    # 2️⃣ must be a reply to *some* tweet
     if tweet.in_reply_to_user_id is None:
         return False
+
+    # 3️⃣ ignore replies that are *directed at us* (people talking back to the bot)
+    if str(tweet.in_reply_to_user_id) == str(BOT_USER_ID):
+        return False
+
     return True
 
 
@@ -72,7 +81,13 @@ def check_mentions():
     utc_dt = datetime.now(timezone.utc)
     print("Local time {}".format(utc_dt.astimezone().isoformat()))
 
-    query = f"@{BOT_USERNAME} -is:retweet -to:{BOT_USERNAME}"
+    query = (
+        f"@{BOT_USERNAME} "  # must mention the bot
+        f"is:reply "  # …and be an actual reply thread
+        f"-to:{BOT_USERNAME} "  # NOT replying to the bot itself
+        f"-from:{BOT_USERNAME} "  # exclude tweets authored by the bot, just in case
+        f"-is:retweet"  # guard against accidental RTs
+    )
     params = {
         "query": query,
         "tweet_fields": [
@@ -103,7 +118,6 @@ def check_mentions():
             if t.author_id in user_map:
                 tweet_author_map[t.id] = user_map[t.author_id]
 
-
     scheduled_tweets = []
 
     for tweet in reversed(tweets):  # Oldest to newest
@@ -113,9 +127,9 @@ def check_mentions():
         with open(check_log_path, "r") as f:
             checked_posts = set(f.read().split())
 
-        for ref in tweet.referenced_tweets:
-            if ref["type"] == "replied_to":
-                replied_to_id = ref["id"]
+        for ref in tweet.referenced_tweets or []:
+            if getattr(ref, "type", None) == "replied_to":
+                replied_to_id = ref.id
                 print(replied_to_id)
                 if str(replied_to_id) in checked_posts:
                     print(f"Already processed tweet {replied_to_id}, skipping...")

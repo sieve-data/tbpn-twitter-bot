@@ -22,6 +22,7 @@ def escape_for_drawtext(text: str) -> str:
     text = text.replace('"', "")  # remove double quotes entirely if not essential
     return text
 
+
 def make_podcast(script: List, title: str):
     script: List[Dialogue] = script
     audio_meta: List[Dict] = []
@@ -79,24 +80,32 @@ def make_podcast(script: List, title: str):
         final_stitched_path = "final_stitched_output.mp4"
         print(f"Adding overlay, outputting to: {final_stitched_path}")
         text = escape_for_drawtext(title)
-        overlay_video_path="overlay.mov"
+        overlay_video_path = "overlay.mov"
+        filter_chain = (
+            "[1:v]format=rgba,scale=1280:720[ovrl];"
+            "[0:v][ovrl]overlay=0:0:format=auto[base];"
+            "[base]drawtext="
+            f"text='{text}':fontcolor=black:fontsize=48:"
+            "x=185:y=H-th-180,format=yuv420p[out]"
+        )
 
         try:
             subprocess.run(
                 [
                     "ffmpeg",
                     "-y",
-                    "-i", temp_stitched_path,
-                    "-i", overlay_video_path,
+                    "-i",
+                    temp_stitched_path,  # background
+                    "-i",
+                    overlay_video_path,  # transparent .mov
                     "-filter_complex",
-                    (
-                        "[1:v]format=rgba[ovrl];"
-                        "[0:v][ovrl]overlay=0:0:format=auto[tmp];"
-                        "[tmp]drawtext=text='{text}':fontcolor=black:fontsize=48:x=185:y=H-th-180,format=yuv420p[out]"
-                    ).replace("{text}", text),
-                    "-map", "[out]",
-                    "-map", "0:a?",
-                    "-c:a", "aac",
+                    filter_chain,
+                    "-map",
+                    "[out]",
+                    "-map",
+                    "0:a?",  # keep audio from the background if present
+                    "-c:a",
+                    "aac",
                     "-shortest",
                     final_stitched_path,
                 ],
