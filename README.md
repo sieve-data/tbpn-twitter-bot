@@ -1,15 +1,15 @@
 # How to Create an AI Video Influencer Agent for X/Twitter Using Sieve AI
 
-With the rise of virtual influencers and AI agents, finding good solutions for lipsync and clip processing is super important. Fortunately, with Sieve's APIs, you can easily and rapidly build an AI influencer agent within a matter of minutes. These virtual influencers can be used for a variety of use cases like:
+With the rise of virtual influencers and AI agents, finding good solutions for lipsync and video clip processing is super valuable. Fortunately, with Sieve's APIs, you can easily and rapidly build an AI influencer agent within a matter of minutes. These virtual influencers can be used for a variety of use cases like:
 
 - Automated AI UGC Ad Campaigns
-- AI Crypto Virtual Agents
 - Educational Content Creation
 - Virtual Brand Ambassadors
 - AI News Anchors
 - Social Media Influencer Content
 - Product Demonstrations
 - Virtual Event Hosts
+- AI Crypto Virtual Agents
 
 Recently, we worked on a [fun project](https://x.com/tbpnify) based on the TBPN podcast, mimicking the style of the show, where the hosts Jordi Hays and John Coogan reply to viral tweets and break them down.
 
