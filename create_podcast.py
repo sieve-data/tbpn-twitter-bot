@@ -15,11 +15,24 @@ class Dialogue(TypedDict):
     speaker: Literal["jordi", "john"]
 
 
-def escape_for_drawtext(text: str) -> str:
-    text = text.replace("\\", "\\\\")
-    text = text.replace(":", "\\:")
-    text = text.replace("'", "\\'")
-    text = text.replace('"', "")  # remove double quotes entirely if not essential
+def escape_for_drawtext(text: str, squeeze_ws: bool = True) -> str:
+    text = text.replace("\n", " ").replace("\r", " ")
+    escape_map = {
+        "\\": r"\\",
+        ":": r"\:",
+        "'": r"\'",
+        ",": r"\,",
+        ";": r"\;",
+        "=": r"\=",
+        "%": r"\%",
+        "[": r"\[",
+        "]": r"\]",
+        "#": r"\#",
+        '"': "",  # safest to drop double-quotes entirely
+    }
+    for char, esc in escape_map.items():
+        text = text.replace(char, esc)
+
     return text
 
 
@@ -82,7 +95,7 @@ def make_podcast(script: List, title: str):
         text = escape_for_drawtext(title)
         overlay_video_path = "overlay.mov"
         filter_chain = (
-            "[1:v]format=rgba,scale=1280:720[ovrl];"
+            "[1:v]format=rgba[ovrl];"  # convert overlay to RGBA so its alpha works
             "[0:v][ovrl]overlay=0:0:format=auto[base];"
             "[base]drawtext="
             f"text='{text}':fontcolor=black:fontsize=48:"
