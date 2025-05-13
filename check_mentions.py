@@ -42,7 +42,7 @@ def run_scheduled_posts(tweet_data):
 
     for idx, (reply_url, tweet_text, tweet_id) in enumerate(tweet_data):
         print(f"Posting #{idx + 1}/{total}: {reply_url}")
-        create_tbpn_post = sieve.function.get("sieve-internal/create-tbpn-post")
+        create_tbpn_post = sieve.function.get("your-sieve-username/create-tbpn-post")
         create_tbpn_post.push(reply_url, tweet_text, tweet_id)
 
         # Save to checked posts

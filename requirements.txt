@@ -6,7 +6,6 @@ opencv-python
 Pillow
 python-dotenv
 Requests
-sieve
 sievedata
 torch
 tqdm
