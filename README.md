@@ -32,6 +32,8 @@ ELEVEN_LABS_API_KEY=
 You will need to get keys for the X api from your X developer portal. Additionally you will need OpenAI, Perplexity, and Elevenlabs
 keys for writing scripts and generating audio.
 
+You will also need to download the TBPN overlay, you can get that from this [link](https://storage.googleapis.com/sieve-public-data/overlay.mov).
+
 Deploy the create podcast function to your sieve acount.
 
 - Login to sieve with your sieve API key with `sieve login`
@@ -42,6 +44,7 @@ Then update the sieve function in check_mentions.py:
 `sieve.function.get("sieve-internal/create-tbpn-post")`
 
 And also update the path to the log file: `check_log_path = ""`
+Finaly
 
 You can run a test for the calls to the bot with: `python check_mentions.py`
 
