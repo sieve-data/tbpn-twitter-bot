@@ -34,7 +34,7 @@ You will need to get keys for the X API from your [X developer portal](https://d
 
 You will also need to download the TBPN overlay, you can get that from this [link](https://storage.googleapis.com/sieve-public-data/overlay.mov). Put this in the folder directory.
 
-Set the voice ids from elevenlabs for your hosts on elevenlabs in `podcast_utils.py`:
+Set the voice IDs from Elevenlabs to the voices you want in `podcast_utils.py`:
 
 ```python
 jordi_voice_id = "Tw6MHQ70AkrkqFDf75BN"
