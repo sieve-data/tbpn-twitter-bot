@@ -3,6 +3,10 @@
 Code for creating an AI video influencer twitter bot using Sieve APIs!
 You can check out our blog post on this project [here](https://www.sievedata.com/blog/ai-video-influencer-bot)
 
+##### Note On Responsible Use:
+
+It's important to build and represent influencers responsibly. Ideally, you should create content based on yourself or obtain explicit permission from the individual you're featuring. If you choose to use another creator's likeness, limit it to clearly humorous or parody contexts, and always make it transparent that the content was generated using AI. Above all, respect the creator's wishes, if they ask for the content to be removed, honor that decision promptly.
+
 ### Setup
 
 Create a new virtual environment with
